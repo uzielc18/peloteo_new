@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Socio;
 use App\Http\Resources\SocioResource;
 use App\Http\Resources\SocioCollection;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class SocioController extends Controller
 {
@@ -20,7 +21,16 @@ class SocioController extends Controller
      */
     public function index(Request $request)
     {
-        return new SocioCollection(Socio::all());
+        $q=$request->q;
+        $data=Socio::where('estado',1)
+        ->when($q, function (Builder $query,string $q) {
+            return $query->where('razon_social', 'LIKE', '%'.$q.'%')
+            ->orWhere('ruc', 'LIKE', '%'.$q.'%')
+            ->orWhere('dni', 'LIKE', '%'.$q.'%');
+
+        })
+        ->get();
+        return new SocioCollection($data);
     }
 
     /**
