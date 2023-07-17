@@ -33,7 +33,7 @@ class SocioResource extends JsonResource
         //return parent::toArray($request);
         return [
             'user_id' => $this->user_id,
-            'user_name' => $this->name,
+            'user_name' => $this->user->name,
             'razon_social' => $this->razon_social,
  			'ruc' => $this->ruc, 
  			'dni' => $this->dni, 

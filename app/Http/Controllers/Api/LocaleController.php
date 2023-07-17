@@ -20,6 +20,18 @@ class LocaleController extends Controller
      */
     public function index(Request $request)
     {
+        $socio_id=$request->socio_id;
+        $q=$request->q;
+        Locale::where('estado',1)
+        ->when($socio_id,function ($query, $socio_id) {
+            return $query->where('socio_id',$socio_id);
+        })
+        ->when($q, function ($query,$q) {
+            return $query->where('razon_social', 'LIKE', '%'.$q.'%')
+            ->orWhere('ruc', 'LIKE', '%'.$q.'%')
+            ->orWhere('dni', 'LIKE', '%'.$q.'%');
+        })
+        ->get();
         return new LocaleCollection(Locale::all());
     }
 

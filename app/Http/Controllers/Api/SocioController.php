@@ -23,7 +23,7 @@ class SocioController extends Controller
     {
         $q=$request->q;
         $data=Socio::where('estado',1)
-        ->when($q, function (Builder $query,string $q) {
+        ->when($q, function ($query,$q) {
             return $query->where('razon_social', 'LIKE', '%'.$q.'%')
             ->orWhere('ruc', 'LIKE', '%'.$q.'%')
             ->orWhere('dni', 'LIKE', '%'.$q.'%');

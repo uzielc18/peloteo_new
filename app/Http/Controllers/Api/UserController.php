@@ -34,21 +34,27 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return UserCollection
+     * @return JsonResponse
      */
     public function userSinSocio(Request $request)
     {
         $q=$request->q;
         $data=User::leftJoin('socios','users.id','=','socios.user_id')
             ->when($q, function ($query,string $q) {
-            return $query->where('users.name', 'LIKE', '%'.$q.'%')
-                ->orWhere('users.email', 'LIKE', '%'.$q.'%');
+            return $query->where('users.name', 'LIKE', '%'.$q.'%');
+               // ->orWhere('users.email', 'LIKE', '%'.$q.'%')->whereNull('socios.user_id');
 
         })
-            ->whereNotNull('socios.user_id')
-            ->select('users.*')
+            ->whereNull('socios.user_id')
+            ->select('users.*','socios.dni','socios.user_id')
             ->get();
-        return new UserCollection($data);
+            return response()->json([
+                'success' => true,
+                'data'=>$data,
+                'meta' => null,
+                'errors' => null
+            ], 200);
+        //return new UserCollection($data);
     }
 
     /**
