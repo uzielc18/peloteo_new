@@ -65,3 +65,4 @@ Route::apiResource('provincias', ProvinciaController::class);
 Route::apiResource('reservasUsuarios', ReservasUsuarioController::class);
 Route::apiResource('socios', SocioController::class);
 Route::apiResource('users', UserController::class);
+Route::get('users-sin-socio', [UserController::class,'userSinSocio']);

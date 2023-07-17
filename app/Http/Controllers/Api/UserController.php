@@ -20,7 +20,35 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return new UserCollection(User::all());
+        $q=$request->q;
+        $data=User::when($q, function ($query,string $q) {
+                return $query->where('name', 'LIKE', '%'.$q.'%')
+                    ->orWhere('email', 'LIKE', '%'.$q.'%');
+
+            })
+            ->get();
+        return new UserCollection($data);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return UserCollection
+     */
+    public function userSinSocio(Request $request)
+    {
+        $q=$request->q;
+        $data=User::leftJoin('socios','users.id','=','socios.user_id')
+            ->when($q, function ($query,string $q) {
+            return $query->where('users.name', 'LIKE', '%'.$q.'%')
+                ->orWhere('users.email', 'LIKE', '%'.$q.'%');
+
+        })
+            ->whereNotNull('socios.user_id')
+            ->select('users.*')
+            ->get();
+        return new UserCollection($data);
     }
 
     /**

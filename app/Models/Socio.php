@@ -9,11 +9,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 /**
  * Class Socio
- * 
+ *
  * @property int $user_id
  * @property string|null $razon_social
  * @property string|null $ruc
@@ -27,7 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Collection|Cancha[] $canchas
  * @property Collection|Locale[] $locales
  * @property Collection|PagosSocio[] $pagos_socios
@@ -71,4 +73,8 @@ class Socio extends Model
 	{
 		return $this->hasMany(PagosSocio::class);
 	}
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
