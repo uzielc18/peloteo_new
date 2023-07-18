@@ -24,6 +24,17 @@ class CanchasTipoController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return CanchasTipoCollection
+     */
+    public function misCanchas(Request $request)
+    {
+        return new CanchasTipoCollection(CanchasTipo::all());
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request

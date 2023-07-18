@@ -48,6 +48,7 @@ class Socio extends Model
 	];
 
 	protected $fillable = [
+		'user_id',
 		'razon_social',
 		'ruc',
 		'dni',
@@ -66,7 +67,7 @@ class Socio extends Model
 
 	public function locales()
 	{
-		return $this->hasMany(Locale::class);
+		return $this->hasMany(Locale::class,'socio_id','user_id');
 	}
 
 	public function pagos_socios()

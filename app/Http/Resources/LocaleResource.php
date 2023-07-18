@@ -34,7 +34,7 @@ class LocaleResource extends JsonResource
         return [
             'id' => $this->id,
             'socio_id' => $this->socio_id,
-            'socio_nombre' => $this->socio->razon_social,
+            'socio_razon_social' => $this->socio?->razon_social,
             'nombre' => $this->nombre,
  			'codigo' => $this->codigo, 
  			'direccion' => $this->direccion, 

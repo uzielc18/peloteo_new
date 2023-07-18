@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Locale;
+use App\Models\Socio;
 use App\Http\Resources\LocaleResource;
 use App\Http\Resources\LocaleCollection;
 
@@ -22,18 +23,35 @@ class LocaleController extends Controller
     {
         $socio_id=$request->socio_id;
         $q=$request->q;
-        Locale::where('estado',1)
+        $data=Locale::where('estado',1)
         ->when($socio_id,function ($query, $socio_id) {
             return $query->where('socio_id',$socio_id);
         })
         ->when($q, function ($query,$q) {
-            return $query->where('razon_social', 'LIKE', '%'.$q.'%')
-            ->orWhere('ruc', 'LIKE', '%'.$q.'%')
-            ->orWhere('dni', 'LIKE', '%'.$q.'%');
+            return $query->where('razon_social', 'LIKE', '%'.$q.'%');
         })
         ->get();
-        return new LocaleCollection(Locale::all());
-    }
+        return new LocaleCollection($data);
+    } /**
+    * Display a listing of the resource.
+    *
+    * @param Request $request
+    * @param Socio $socio
+    * @return LocaleCollection
+    */
+   public function misLocales(Request $request,Socio $socio)
+   {
+       $q=$request->q;
+       $data=Locale::where('estado',1)
+       ->where('socio_id',$socio->id)
+       ->when($q, function ($query,$q) {
+           return $query->where('razon_social', 'LIKE', '%'.$q.'%');
+       })
+       ->get();
+       return new LocaleCollection($data);
+   }
+
+
 
     /**
      * Store a newly created resource in storage.
